@@ -1,6 +1,13 @@
 import React from "react";
 import "./Login.scss";
+import { Link, useNavigate } from 'react-router-dom';
+
 const Login = (props) => {
+    const history = useNavigate();
+
+    const handeleCreateNewAccount = () => {
+        history('/register')
+    }
     return (
         <div className="login-container mt-3">
             <div className="container">
@@ -15,13 +22,13 @@ const Login = (props) => {
                         <input type="password" className="form-control" placeholder="Password" />
                         <button className="btn btn-primary">Log In</button>
                         <span className="text-center">
-                            <a className="forgot-password" href="#">
+                            <Link className="forgot-password" href="#">
                                 Forgotten password?
-                            </a>
+                            </Link>
                         </span>
                         <hr />
                         <div className="text-center">
-                            <button className="btn btn-success">Create new account</button>
+                            <button className="btn btn-success" onClick={() => handeleCreateNewAccount()}>Create new account</button>
                         </div>
                     </div>
                 </div>
