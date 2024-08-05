@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./Register.scss";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 const Register = (props) => {
@@ -19,12 +22,37 @@ const Register = (props) => {
                 console.log(">>> Error : ", error);
             });
     }, []);
-    
+
+    const isValidInput = () => {
+        if (!email) {
+            toast.error("Email is required!");
+            return false;
+        }
+        if (!password) {
+            toast.error("Password is required!");
+            return false;
+        }
+        if (password !== confirmPassword) {
+            toast.error("Password and confirm password must match!");
+            return false;
+        }
+        if (!username) {
+            toast.error("Username is required!");
+            return false;
+        }
+        let regx = /\S+@\S+\.\S+/;
+        if (!regx.test(email)) {
+            toast.error("Invalid email format!");
+            return false;
+        }
+        return true;
+    };
     const handleRegister = () => {
-        let userData = { email , username , password , phone , confirmPassword}
-        console.log('>>> check user data : ', userData);
+        const check = isValidInput();
+        let userData = { email, username, password, phone, confirmPassword };
         
-    }
+        console.log(">>> check user data : ", userData);
+    };
     const handeleLogin = () => {
         history(-1);
     };
@@ -73,7 +101,9 @@ const Register = (props) => {
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
-                        <button className="btn btn-primary" onClick={() => handleRegister()}>Register</button>
+                        <button className="btn btn-primary" onClick={() => handleRegister()}>
+                            Register
+                        </button>
                         <hr />
                         <div className="text-center">
                             <button className="btn btn-success" onClick={() => handeleLogin()}>
