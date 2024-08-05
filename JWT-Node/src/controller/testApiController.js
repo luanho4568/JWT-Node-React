@@ -38,6 +38,15 @@ const handleRegister = async (req, res) => {
             DT: "", // data
         });
     }
-    console.log(">>> call me", req.body);
 };
-export { testApi, handleRegister };
+
+const handleLogin = async (req, res) => { 
+    console.log('>>> check login from react : ',req.body);
+    
+    return res.status(200).json({
+        EM: "Logged in successfully!", // error message
+        EC: 0, // error code
+        DT: "", // data
+    });
+}
+export { testApi, handleRegister , handleLogin };

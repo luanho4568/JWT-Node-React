@@ -54,6 +54,7 @@ const handleRegisterNewUser = async (rawUserData) => {
         return {
             EM: "Create new user Successfully!!",
             EC: 0,
+            DT: "",
         };
     } catch (error) {
         console.log(error);
