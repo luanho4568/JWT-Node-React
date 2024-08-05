@@ -1,5 +1,5 @@
 import ret from "bluebird/js/release/util";
-import { handleRegisterNewUser } from "../service/loginRegisterService";
+import { handleRegisterNewUser, handleUserLogin } from "../service/loginRegisterService";
 
 const testApi = (req, res) => {
     return res.status(200).json({
@@ -17,15 +17,15 @@ const handleRegister = async (req, res) => {
                 DT: "", // data
             });
         }
-        if (req.body.password && req.body.password.length < 6) { 
+        if (req.body.password && req.body.password.length < 6) {
             return res.status(200).json({
-                EM : "Your password must have more than 6 letter",
+                EM: "Your password must have more than 6 letter",
                 EC: "1", // error code
                 DT: "", // data
             });
         }
         // service create user
-        let data = await handleRegisterNewUser(req.body)
+        let data = await handleRegisterNewUser(req.body);
         return res.status(200).json({
             EM: data.EM, // error message
             EC: data.EC, // error code
@@ -40,13 +40,21 @@ const handleRegister = async (req, res) => {
     }
 };
 
-const handleLogin = async (req, res) => { 
-    console.log('>>> check login from react : ',req.body);
-    
-    return res.status(200).json({
-        EM: "Logged in successfully!", // error message
-        EC: 0, // error code
-        DT: "", // data
-    });
-}
-export { testApi, handleRegister , handleLogin };
+const handleLogin = async (req, res) => {
+    try {
+        let data = await handleUserLogin(req.body);
+        return res.status(200).json({
+            EM: data.EM, // error message
+            EC: data.EC, // error code
+            DT: data.DT, // data
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: "Error from server", // error message
+            EC: "-1", // error code
+            DT: "", // data
+        });
+    }
+};
+export { testApi, handleRegister, handleLogin };
