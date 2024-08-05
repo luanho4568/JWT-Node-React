@@ -1,8 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Register.scss";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 const Register = (props) => {
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [phone, setPhone] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const history = useNavigate();
     useEffect(() => {
         axios
@@ -14,7 +19,12 @@ const Register = (props) => {
                 console.log(">>> Error : ", error);
             });
     }, []);
-
+    
+    const handleRegister = () => {
+        let userData = { email , username , password , phone , confirmPassword}
+        console.log('>>> check user data : ', userData);
+        
+    }
     const handeleLogin = () => {
         history(-1);
     };
@@ -28,12 +38,42 @@ const Register = (props) => {
                     </div>
                     <div className="content-right col-12 col-sm-5 d-flex flex-column gap-3 py-3 ">
                         <div className="brand d-sm-none">Facebook</div>
-                        <input type="text" className="form-control" placeholder="Username" />
-                        <input type="text" className="form-control" placeholder="Phone number" />
-                        <input type="text" className="form-control" placeholder="Email address or phone number" />
-                        <input type="password" className="form-control" placeholder="Password" />
-                        <input type="password" className="form-control" placeholder="Confim password" />
-                        <button className="btn btn-primary">Register</button>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Phone number"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                        />
+                        <input
+                            type="email"
+                            className="form-control"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Confim password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                        <button className="btn btn-primary" onClick={() => handleRegister()}>Register</button>
                         <hr />
                         <div className="text-center">
                             <button className="btn btn-success" onClick={() => handeleLogin()}>
