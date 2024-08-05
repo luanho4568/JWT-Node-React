@@ -7,6 +7,7 @@ import { loginUser } from "../../services/userService";
 const Login = (props) => {
     const [valueLogin, setValueLogin] = useState("");
     const [password, setPassword] = useState("");
+    const [errMessage, setErrMessage] = useState("");
     const defaultObjValidInput = {
         isValidValueLogin: true,
         isValidPassword: true,
@@ -27,10 +28,23 @@ const Login = (props) => {
         if (!password) {
             toast.error("Please enter your password");
             setObjValidInput({ ...defaultObjValidInput, isValidPassword: false });
-
             return;
         }
-        await loginUser({ valueLogin, password });
+        let response = await loginUser({ valueLogin, password });
+        console.log(">>> check response : ", response.data);
+        if (response && response.data && +response.data.EC === 0) {
+            // success
+            let data = {
+                isAuthenticated: true,
+                token: "fake token",
+            };
+            sessionStorage.setItem("account", JSON.stringify(data));
+            history("/users");
+        }
+        if (response && response.data && +response.data.EC !== 0) {
+            // error
+            setErrMessage(response.data.EM);
+        }
     };
     return (
         <div className="login-container mt-3">
@@ -60,6 +74,9 @@ const Login = (props) => {
                                 setPassword(e.target.value);
                             }}
                         />
+                        <span className="text-center" style={{ color: "red", fontSize: "10px" }}>
+                            {errMessage}
+                        </span>
                         <button className="btn btn-primary" onClick={() => handleLogin()}>
                             Log In
                         </button>

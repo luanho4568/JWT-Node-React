@@ -3,3 +3,4 @@
 # npm i --save-exect bootstrap
 # npm i --save-exect axios
 # npm i --save-exect react-toastify
+# npm i --save-exect lodash
