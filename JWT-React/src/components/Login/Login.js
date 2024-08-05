@@ -40,10 +40,16 @@ const Login = (props) => {
             };
             sessionStorage.setItem("account", JSON.stringify(data));
             history("/users");
+            window.location.reload();
         }
         if (response && response.data && +response.data.EC !== 0) {
             // error
             setErrMessage(response.data.EM);
+        }
+    };
+    const handlePressEnter = (e) => {
+        if (e.key === "Enter") {
+            handleLogin();
         }
     };
     return (
@@ -73,6 +79,7 @@ const Login = (props) => {
                             onChange={(e) => {
                                 setPassword(e.target.value);
                             }}
+                            onKeyDown={(e) => handlePressEnter(e)}
                         />
                         <span className="text-center" style={{ color: "red", fontSize: "10px" }}>
                             {errMessage}
