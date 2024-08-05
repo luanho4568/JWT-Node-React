@@ -13,7 +13,6 @@ const initWebRoutes = (app) => {
     router.post("/delete-user/:id" , handleDeleteUser)
     router.post("/update-user/:id" , getUpdateUserPage) 
     router.post("/users/update-user" , handleUpdateUser)
-    router.get("/api/test-api",testApi)
     return app.use("/", router);
 };
 
