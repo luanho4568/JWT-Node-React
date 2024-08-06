@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
-import { fetchAllUser } from "../../services/userService";
+import { deleteUser, fetchAllUser } from "../../services/userService";
 import ReactPaginate from "react-paginate";
+import { toast } from "react-toastify";
+import ModalDelete from "./ModalDelete";
+import ModalUser from "./ModalUser";
 
 const User = (props) => {
     const [listUser, setListUser] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [currentLimit, setCurrentLimit] = useState(3);
     const [totalPages, setTotalPages] = useState(0);
+
+    const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+    const [isShowModalUser, setIsShowModalUser] = useState(false);
+    const [dataModal, setDataModal] = useState({});
     useEffect(() => {
         fetchUser();
     }, [currentPage]);
@@ -16,16 +23,36 @@ const User = (props) => {
         if (response && response.data && response.data.EC === 0) {
             setTotalPages(response.data.DT.totalPages);
             setListUser(response.data.DT.users);
-            console.log(response.data);
         }
     };
     const handlePageClick = async (event) => {
         setCurrentPage(+event.selected + 1);
     };
+    const handleDeleteUser = async (user) => {
+        setDataModal(user);
+        setIsShowModalDelete(true);
+    };
+    const handleClose = () => {
+        setIsShowModalDelete(false);
+        setDataModal({});
+    };
+    const confirmDeleteUser = async (user) => {
+        let response = await deleteUser(dataModal);
+        
+        if (response && response.data.EC === 0) {
+            toast.success(response.data.EM);
+            await fetchUser();
+            setIsShowModalDelete(false);
+        } else {
+            toast.error(response.data.EM);
+        }
+    };
+    console.log(dataModal);
+    
     return (
         <>
-            <div className="manage-user-container">
-                <div className="container">
+            <div className="container">
+                <div className="manage-user-container">
                     <div className="user-header">
                         <div className="title">
                             <h3>Table Users</h3>
@@ -60,8 +87,13 @@ const User = (props) => {
                                                 <td>{item.phone}</td>
                                                 <td>{item.Group ? item.Group.name : ""}</td>
                                                 <td>
-                                                    <button className="btn btn-warning mr-3">Edit</button>
-                                                    <button className="btn btn-danger">Delete</button>
+                                                    <button className="btn btn-warning mx-3">Edit</button>
+                                                    <button
+                                                        className="btn btn-danger"
+                                                        onClick={() => handleDeleteUser(item)}
+                                                    >
+                                                        Delete
+                                                    </button>
                                                 </td>
                                             </tr>
                                         );
@@ -100,6 +132,16 @@ const User = (props) => {
                     )}
                 </div>
             </div>
+            <ModalDelete
+                show={isShowModalDelete}
+                handleClose={handleClose}
+                confirmDeleteUser={confirmDeleteUser}
+                dataModal={dataModal}
+            />
+            <ModalUser
+                title = "Create New User"
+                handleClose={handleClose}
+            />
         </>
     );
 };

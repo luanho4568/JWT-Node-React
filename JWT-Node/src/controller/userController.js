@@ -1,4 +1,4 @@
-import { createNewUser, getAllUsers, getUserWithPagination } from "../service/userApiService";
+import { createNewUser, deleteUser, getAllUsers, getUserWithPagination } from "../service/userApiService";
 
 const readFunc = async (req, res) => {
     try {
@@ -52,6 +52,12 @@ const updateFunc = async (req, res) => {
 };
 const deleteFunc = async (req, res) => {
     try {
+        let data = await deleteUser(req.body.id)
+        return res.status(200).json({
+            EM: data.EM, // error message
+            EC: data.EC, // error code
+            DT: data.DT, // data
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({
