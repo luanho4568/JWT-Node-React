@@ -101,4 +101,4 @@ const handleUserLogin = async (rawData) => {
         };
     }
 };
-export { handleRegisterNewUser, handleUserLogin };
+export { handleRegisterNewUser, handleUserLogin ,  hashUserPassword ,isCheckEmail , isCheckPassword , isCheckPhone};

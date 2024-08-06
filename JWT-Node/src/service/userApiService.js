@@ -1,6 +1,7 @@
 import ret from "bluebird/js/release/util";
 import db from "../models/index";
 import { where } from "sequelize";
+import { hashUserPassword, isCheckEmail, isCheckPhone } from "./loginRegisterService";
 
 const getUserWithPagination = async (page, limit) => {
     try {
@@ -8,8 +9,9 @@ const getUserWithPagination = async (page, limit) => {
         const { count, rows } = await db.User.findAndCountAll({
             offset,
             limit,
-            include: { model: db.Group, attributes: ["name", "description"] },
-            attributes: ["id", "username", "email", "phone", "gender"],
+            include: { model: db.Group, attributes: ["name", "description" , "id"] },
+            attributes: ["id", "username", "email", "phone", "gender", "address"],
+            order : [['id' , 'DESC']]
         });
 
         let totalPages = Math.ceil(count / limit);
@@ -61,9 +63,32 @@ const getAllUsers = async () => {
     }
 };
 
-const createNewUser = async () => {
+const createNewUser = async (data) => {
     try {
-        let user = await User.create({});
+        let checkEmail = await isCheckEmail(data.email);
+        let checkPhone = await isCheckPhone(data.phone);
+        if (checkEmail) {
+            return {
+                EM: "The email is already exists",
+                EC: 1,
+                DT: "email",
+            };
+        }
+        if (checkPhone) {
+            return {
+                EM: "The phone number is already exists",
+                EC: 1,
+                DT: 'phone',
+            };
+        }
+        // hash password
+        let hashPass = hashUserPassword(data.password);
+        let user = await db.User.create({...data , password: hashPass});
+        return {
+            EM: "Create user success!",
+            EC: 0,
+            DT: [],
+        };
     } catch (error) {
         console.log(error);
         return {
@@ -102,14 +127,14 @@ const deleteUser = async (id) => {
         let user = await db.User.findOne({
             where: { id },
         });
-        if (!user){
+        if (!user) {
             return {
                 EM: "User not found",
                 EC: -2,
                 DT: [],
-            }
+            };
         }
-        await user.destroy()
+        await user.destroy();
         return {
             EM: "Delete user successfully",
             EC: 0,

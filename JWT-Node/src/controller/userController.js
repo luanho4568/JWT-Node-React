@@ -1,11 +1,11 @@
-import { createNewUser, deleteUser, getAllUsers, getUserWithPagination } from "../service/userApiService";
+import { createNewUser, deleteUser, getAllUsers, getUserWithPagination, updateUser } from "../service/userApiService";
 
 const readFunc = async (req, res) => {
     try {
         if (req.query.page && req.query.limit) {
             let page = req.query.page;
             let limit = req.query.limit;
-            let data = await getUserWithPagination(+page,+limit);
+            let data = await getUserWithPagination(+page, +limit);
             return res.status(200).json({
                 EM: data.EM, // error message
                 EC: data.EC, // error code
@@ -30,6 +30,12 @@ const readFunc = async (req, res) => {
 };
 const createFunc = async (req, res) => {
     try {
+        let data = await createNewUser(req.body);
+        return res.status(200).json({
+            EM: data.EM, // error message
+            EC: data.EC, // error code
+            DT: data.DT, // data
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({
@@ -41,6 +47,12 @@ const createFunc = async (req, res) => {
 };
 const updateFunc = async (req, res) => {
     try {
+        let data = await updateUser(req.body);
+        return res.status(200).json({
+            EM: data.EM, // error message
+            EC: data.EC, // error code
+            DT: data.DT, // data
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({
@@ -52,7 +64,7 @@ const updateFunc = async (req, res) => {
 };
 const deleteFunc = async (req, res) => {
     try {
-        let data = await deleteUser(req.body.id)
+        let data = await deleteUser(req.body.id);
         return res.status(200).json({
             EM: data.EM, // error message
             EC: data.EC, // error code
