@@ -2,6 +2,35 @@ import ret from "bluebird/js/release/util";
 import db from "../models/index";
 import { where } from "sequelize";
 
+const getUserWithPagination = async (page, limit) => {
+    try {
+        let offset = (page - 1) * limit;
+        const { count, rows } = await db.User.findAndCountAll({
+            offset,
+            limit,
+        });
+
+        let totalPages = Math.ceil(count / limit);
+
+        let data = {
+            totalRows: count,
+            totalPages,
+            users: rows,
+        };
+        return {
+            EM: "Get list page user successfully!!",
+            EC: 0,
+            DT: data,
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            EM: "Somthing wrongs with services",
+            EC: -1,
+            DT: [],
+        };
+    }
+};
 const getAllUsers = async () => {
     try {
         let user = await db.User.findAll({
@@ -81,4 +110,4 @@ const deleteUser = async (id) => {
     }
 };
 
-export { getAllUsers, createNewUser, updateUser, deleteUser };
+export { getAllUsers, createNewUser, updateUser, deleteUser, getUserWithPagination };

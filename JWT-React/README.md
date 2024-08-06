@@ -4,3 +4,4 @@
 # npm i --save-exect axios
 # npm i --save-exect react-toastify
 # npm i --save-exect lodash
+# npm i --save-exect react-paginate@8.1.0

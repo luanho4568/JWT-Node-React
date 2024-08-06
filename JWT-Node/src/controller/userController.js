@@ -1,13 +1,24 @@
-import { createNewUser, getAllUsers } from "../service/userApiService";
+import { createNewUser, getAllUsers, getUserWithPagination } from "../service/userApiService";
 
 const readFunc = async (req, res) => {
     try {
-        let data = await getAllUsers();
-        return res.status(200).json({
-            EM: data.EM, // error message
-            EC: data.EC, // error code
-            DT: data.DT, // data
-        });
+        if (req.query.page && req.query.limit) {
+            let page = req.query.page;
+            let limit = req.query.limit;
+            let data = await getUserWithPagination(+page,+limit);
+            return res.status(200).json({
+                EM: data.EM, // error message
+                EC: data.EC, // error code
+                DT: data.DT, // data
+            });
+        } else {
+            let data = await getAllUsers();
+            return res.status(200).json({
+                EM: data.EM, // error message
+                EC: data.EC, // error code
+                DT: data.DT, // data
+            });
+        }
     } catch (error) {
         console.log(error);
         return res.status(500).json({
