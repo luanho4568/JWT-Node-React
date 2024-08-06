@@ -1,6 +1,7 @@
 import express from "express";
 import { handleLogin, handleRegister, testApi } from "../controller/testApiController";
 import { createFunc, deleteFunc, readFunc, updateFunc } from "../controller/userController";
+import { readGroupFunc } from "../controller/groupController";
 
 const router = express.Router();
 /**
@@ -17,6 +18,8 @@ const initAPIRoutes = (app) => {
     router.put("/user/update",updateFunc)
     router.delete("/user/delete",deleteFunc)
     
+    router.get("/group/read",readGroupFunc)
+
     return app.use("/api/v1/", router);
 };
 

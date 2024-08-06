@@ -140,7 +140,6 @@ const User = (props) => {
             />
             <ModalUser
                 title = "Create New User"
-                handleClose={handleClose}
             />
         </>
     );
