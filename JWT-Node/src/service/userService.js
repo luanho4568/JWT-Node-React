@@ -29,8 +29,8 @@ const getUserList = async () => {
         where: { id: 1 },
         raw: true,
         include: { model: db.Group, attributes: ["name" , "description"] },
-        nest: true,
         attributes: ["id", "username", "email"],
+        nest: true,
     });
     console.log(">>> check new user ", newUser);
 
