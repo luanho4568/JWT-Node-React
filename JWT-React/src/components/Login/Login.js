@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -18,6 +18,7 @@ const Login = (props) => {
     const handeleCreateNewAccount = () => {
         history("/register");
     };
+
     const handleLogin = async () => {
         setObjValidInput(defaultObjValidInput);
         if (!valueLogin) {
@@ -52,6 +53,13 @@ const Login = (props) => {
             handleLogin();
         }
     };
+    useEffect(() => {
+        let session = sessionStorage.getItem("account");
+        if (session) {
+            history("/");
+            window.location.reload();
+        }
+    }, []);
     return (
         <div className="login-container mt-3">
             <div className="container">
