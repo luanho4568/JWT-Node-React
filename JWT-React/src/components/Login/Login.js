@@ -33,7 +33,7 @@ const Login = (props) => {
         }
         let response = await loginUser({ valueLogin, password });
         console.log(">>> check response : ", response.data);
-        if (response && response.data && +response.data.EC === 0) {
+        if (response && +response.EC === 0) {
             // success
             let data = {
                 isAuthenticated: true,
@@ -43,9 +43,9 @@ const Login = (props) => {
             history("/users");
             window.location.reload();
         }
-        if (response && response.data && +response.data.EC !== 0) {
+        if (response && +response.EC !== 0) {
             // error
-            setErrMessage(response.data.EM);
+            setErrMessage(response.EM);
         }
     };
     const handlePressEnter = (e) => {
