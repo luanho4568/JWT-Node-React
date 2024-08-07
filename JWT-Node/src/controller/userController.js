@@ -2,6 +2,8 @@ import { createNewUser, deleteUser, getAllUsers, getUserWithPagination, updateUs
 
 const readFunc = async (req, res) => {
     try {
+        console.log('>>>Cokies : ' , req.cookies);
+        
         if (req.query.page && req.query.limit) {
             let page = req.query.page;
             let limit = req.query.limit;

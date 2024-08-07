@@ -32,7 +32,6 @@ const getUserList = async () => {
         attributes: ["id", "username", "email"],
         nest: true,
     });
-    console.log(">>> check new user ", newUser);
 
     // let roles = await db.Group.findOne({
     //     where: { id: 1 },
@@ -47,8 +46,6 @@ const getUserList = async () => {
         raw: true,
         nest: true,
     });
-    console.log(">>> check new g ", r);
-
     let users = [];
     try {
         users = await db.User.findAll();

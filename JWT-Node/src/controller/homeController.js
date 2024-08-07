@@ -1,5 +1,8 @@
 import { createNewUser, getUserList, deleteUser, getUserById, updateUser } from "../service/userService";
 const handleUserPage = async (req, res) => {
+    // Cookies that have not been signed
+    console.log("Cookies: ", req.cookies);
+
     let userList = await getUserList();
     return res.render("home.ejs", { userList });
 };
@@ -20,7 +23,7 @@ const handleUpdateUser = async (req, res) => {
     let email = req.body.email;
     let username = req.body.username;
     let id = req.body.id;
-    await updateUser( id,username, email);
+    await updateUser(id, username, email);
 
     return res.redirect("/");
 };
