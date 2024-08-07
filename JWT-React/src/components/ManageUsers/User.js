@@ -64,6 +64,9 @@ const User = (props) => {
         setActionModalUser("UPDATE");
         setIsShowModalUser(true);
     };
+    const handleRefesh = async () => {
+        await fetchUser();
+    }
     return (
         <>
             <div className="container">
@@ -73,7 +76,7 @@ const User = (props) => {
                             <h3>Table Users</h3>
                         </div>
                         <div className="actions">
-                            <button className="btn btn-success">Refesh</button>
+                            <button className="btn btn-success" onClick={() => handleRefesh()}>Refesh</button>
                             <button
                                 className="btn btn-primary"
                                 onClick={() => {

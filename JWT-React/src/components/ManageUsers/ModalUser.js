@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { createNewUser, fetchGroup } from "../../services/userService";
+import { createNewUser, fetchGroup, updateCurrentUser } from "../../services/userService";
 import { toast } from "react-toastify";
 import _ from "lodash";
 
@@ -36,14 +36,18 @@ const ModalUser = (props) => {
     }, []);
     useEffect(() => {
         if (action === "UPDATE") {
-            setUserData({ ...dataModalUser, group: dataModalUser.Group ? dataModalUser.Group.id : "" , gender : dataModalUser.gender ? dataModalUser.gender : "Male"});
+            setUserData({
+                ...dataModalUser,
+                group: dataModalUser.Group ? dataModalUser.Group.id : "",
+                gender: dataModalUser.gender ? dataModalUser.gender : "Male",
+            });
         }
     }, [dataModalUser]);
 
     useEffect(() => {
         if (action === "CREATE") {
             if (userGroups && userGroups.length > 0) {
-                setUserData({ ...userData, group: userGroups[0].id , gender : userData.gender = "Male"});
+                setUserData({ ...userData, group: userGroups[0].id, gender: (userData.gender = "Male") });
             }
         }
     }, [action]);
@@ -66,6 +70,7 @@ const ModalUser = (props) => {
         validInputs[name] = true;
     };
     const checkValidateInputs = () => {
+        if (action === "UPDATE") return true;
         setValidInputs(validInputsDefault);
         let arr = ["email", "phone", "password", "group"];
         let check = true;
@@ -84,10 +89,13 @@ const ModalUser = (props) => {
     const handleConfirmUser = async () => {
         let check = checkValidateInputs();
         if (check) {
-            let response = await createNewUser({ ...userData, groupId: userData["group"] });
+            let response =
+                action === "CREATE "
+                    ? await createNewUser({ ...userData, groupId: userData["group"] })
+                    : await updateCurrentUser({ ...userData, groupId: userData["group"] });
             if (response.data && response.data.EC === 0) {
                 props.onHide();
-                setUserData({ ...defaultUserData, group: userGroups[0].id });
+                setUserData({ ...defaultUserData, group: userGroups && userGroups.length > 0 ? userGroups[0].id : "" });
                 toast.success(response.data.EM);
             } else {
                 toast.error(response.data.EM);
@@ -194,12 +202,8 @@ const ModalUser = (props) => {
                                 onChange={(e) => handleOnchangeInput(e.target.value, "gender")}
                                 value={userData.gender}
                             >
-                                <option value="Male">
-                                    Male
-                                </option>
-                                <option value="Female">
-                                    Female
-                                </option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
                                 <option value="Other">Orther</option>
                             </select>
                         </div>

@@ -9,9 +9,9 @@ const getUserWithPagination = async (page, limit) => {
         const { count, rows } = await db.User.findAndCountAll({
             offset,
             limit,
-            include: { model: db.Group, attributes: ["name", "description" , "id"] },
+            include: { model: db.Group, attributes: ["name", "description", "id"] },
             attributes: ["id", "username", "email", "phone", "gender", "address"],
-            order : [['id' , 'DESC']]
+            order: [["id", "DESC"]],
         });
 
         let totalPages = Math.ceil(count / limit);
@@ -78,12 +78,12 @@ const createNewUser = async (data) => {
             return {
                 EM: "The phone number is already exists",
                 EC: 1,
-                DT: 'phone',
+                DT: "phone",
             };
         }
         // hash password
         let hashPass = hashUserPassword(data.password);
-        let user = await db.User.create({...data , password: hashPass});
+        let user = await db.User.create({ ...data, password: hashPass });
         return {
             EM: "Create user success!",
             EC: 0,
@@ -101,6 +101,13 @@ const createNewUser = async (data) => {
 
 const updateUser = async (data) => {
     try {
+        if (!data.groupId) {
+            return {
+                EM: "Error with empty GroupId",
+                EC: 1,
+                DT: "group",
+            };
+        }
         let user = await db.User.findOne({
             where: { id: data.id },
         });
@@ -111,7 +118,17 @@ const updateUser = async (data) => {
                 DT: [],
             };
         }
-        user.save();
+        await user.update({
+            username: data.username,
+            address: data.address,
+            gender: data.gender,
+            groupId: data.groupId,
+        });
+        return {
+            EM: "Update user successfully!!",
+            EC: 0,
+            DT: "",
+        };
     } catch (error) {
         console.log(error);
         return {
