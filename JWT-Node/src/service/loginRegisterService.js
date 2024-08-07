@@ -1,6 +1,9 @@
 import { Op } from "sequelize";
+import "dotenv/config";
 import db from "../models/index";
 import bcrypt from "bcryptjs";
+import { getGroupWithRole } from "./JWTService";
+import { createJWT } from "../middelware/JWTaction";
 const salt = bcrypt.genSaltSync(10);
 const hashUserPassword = (userPassword) => {
     let hashPassword = bcrypt.hashSync(userPassword, salt);
@@ -49,6 +52,7 @@ const handleRegisterNewUser = async (rawUserData) => {
             username: rawUserData.username,
             password: hashPass,
             phone: rawUserData.phone,
+            groupId: 4,
         });
         return {
             EM: "Create new user Successfully!!",
@@ -77,17 +81,26 @@ const handleUserLogin = async (rawData) => {
         });
 
         if (user) {
-            console.log(">>> Found user with email/phone");
             let isCorrectPassword = isCheckPassword(rawData.password, user.password);
             if (isCorrectPassword) {
+                // test role
+                let groupWithRoles = await getGroupWithRole(user);
+                let payload = {
+                    email: user.email,
+                    groupWithRoles,
+                    expiresIn: process.env.JWT_EXPIRES_IN,
+                };
+                let token = createJWT(payload);
                 return {
                     EM: "Login Successfully!!",
                     EC: 0,
-                    DT: "",
+                    DT: {
+                        access_token: token,
+                        data: groupWithRoles,
+                    },
                 };
             }
         }
-        console.log(">>> Input user with email/phone :", rawData.valueLogin, "| Password : ", rawData.password);
         return {
             EM: "Your email / phone number or password is incorrect!",
             EC: 1,
@@ -101,4 +114,4 @@ const handleUserLogin = async (rawData) => {
         };
     }
 };
-export { handleRegisterNewUser, handleUserLogin ,  hashUserPassword ,isCheckEmail , isCheckPassword , isCheckPhone};
+export { handleRegisterNewUser, handleUserLogin, hashUserPassword, isCheckEmail, isCheckPassword, isCheckPhone };

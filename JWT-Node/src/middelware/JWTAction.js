@@ -1,13 +1,12 @@
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
-const createJWT = () => {
-    let payload = { name: "Luan", email: "luan@gmail.com" };
+const createJWT = (payload) => {
     let key = process.env.JWT_SECRET;
     let token = null;
     try {
         let token = jwt.sign(payload, key);
-        console.log(">>> check token : ", token);
+        return token;
     } catch (error) {
         console.log(error);
     }
