@@ -80,4 +80,14 @@ const deleteFunc = async (req, res) => {
     }
 };
 
-export { createFunc, updateFunc, deleteFunc, readFunc };
+const getUserAccount = (req, res) => {
+    return res.status(200).json({
+        EM: "Ok",
+        EC: "0",
+        DT: {
+            access_token: req.token,
+            ...req.user,
+        },
+    });
+};
+export { createFunc, updateFunc, deleteFunc, readFunc, getUserAccount };

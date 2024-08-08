@@ -1,24 +1,19 @@
-import { useContext, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 const PrivateRoutes = (props) => {
-    const history = useNavigate();
     const { user } = useContext(UserContext);
+    console.log(user);
 
-    useEffect(() => {
-        console.log(">>> check context user : ", user);
-
-        let session = sessionStorage.getItem("account");
-        if (!session) {
-            history("/login");
-            window.location.reload();
-        }
-    }, []);
-    return (
-        <>
-            <Outlet />
-        </>
-    );
+    if (user && user.isAuthenticated === true) {
+        return (
+            <>
+                <Outlet />
+            </>
+        );
+    } else {
+        return <Navigate to="/login"></Navigate>;
+    }
 };
 export default PrivateRoutes;

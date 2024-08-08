@@ -20,10 +20,23 @@ const fetchGroup = () => {
     return axios.get(`api/v1/group/read`);
 };
 const createNewUser = (userData) => {
-    return axios.post(`api/v1/user/create` , {...userData});
+    return axios.post(`api/v1/user/create`, { ...userData });
 };
 
 const updateCurrentUser = (userData) => {
-    return axios.put(`api/v1/user/update`, {...userData});
+    return axios.put(`api/v1/user/update`, { ...userData });
 };
-export { registerNewUser, loginUser, fetchAllUser, deleteUser ,fetchGroup , createNewUser , updateCurrentUser};
+
+const getUserAccount = () => {
+    return axios.get("api/v1/account");
+};
+export {
+    registerNewUser,
+    loginUser,
+    getUserAccount,
+    fetchAllUser,
+    deleteUser,
+    fetchGroup,
+    createNewUser,
+    updateCurrentUser,
+};
