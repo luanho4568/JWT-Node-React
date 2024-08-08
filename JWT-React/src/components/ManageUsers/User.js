@@ -25,7 +25,6 @@ const User = (props) => {
 
     const fetchUser = async () => {
         let response = await fetchAllUser(currentPage, currentLimit);
-        console.log('>>> check response: ' , response);
         
         if (response  && response.EC === 0) {
             setTotalPages(response.DT.totalPages);

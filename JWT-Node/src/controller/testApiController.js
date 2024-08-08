@@ -1,13 +1,6 @@
 import ret from "bluebird/js/release/util";
 import { handleRegisterNewUser, handleUserLogin } from "../service/loginRegisterService";
 
-const testApi = (req, res) => {
-    return res.status(200).json({
-        message: "Ok",
-        data: "Test API",
-    });
-};
-
 const handleRegister = async (req, res) => {
     try {
         if (!req.body.email || !req.body.password || !req.body.phone) {
@@ -44,7 +37,9 @@ const handleLogin = async (req, res) => {
     try {
         let data = await handleUserLogin(req.body);
         // set cookie
-        res.cookie("jwt", data.DT.access_token, { httpOnly: true });
+        if (data && data.DT.access_token) {
+            res.cookie("jwt", data.DT.access_token, { httpOnly: true, maxAge: 60 * 60 * 1000 });
+        }
         return res.status(200).json({
             EM: data.EM, // error message
             EC: data.EC, // error code
@@ -59,4 +54,4 @@ const handleLogin = async (req, res) => {
         });
     }
 };
-export { testApi, handleRegister, handleLogin };
+export { handleRegister, handleLogin };
