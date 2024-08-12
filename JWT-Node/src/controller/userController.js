@@ -86,7 +86,9 @@ const getUserAccount = (req, res) => {
         EC: "0",
         DT: {
             access_token: req.token,
-            ...req.user,
+            groupWithRoles: req.user.groupWithRoles,
+            email: req.user.email,
+            username: req.user.username,
         },
     });
 };

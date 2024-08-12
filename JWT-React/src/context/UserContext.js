@@ -4,11 +4,13 @@ import { getUserAccount } from "../services/userService";
 const UserContext = React.createContext(null);
 
 const UserProvider = ({ children }) => {
-    const [user, setUser] = useState({
+    const userDefault = {
+        isLoading: true,
         isAuthenticated: false,
         token: "",
         account: {},
-    });
+    };
+    const [user, setUser] = useState(userDefault);
 
     // Login updates the user data with a name parameter
     const loginContext = (userData) => {
@@ -25,6 +27,7 @@ const UserProvider = ({ children }) => {
 
     const fetchUser = async () => {
         let response = await getUserAccount();
+        console.log(">>> check res : ", response);
         if (response && response.EC === 0) {
             let groupWithRoles = response.DT.groupWithRoles;
             let email = response.DT.email;
@@ -34,13 +37,19 @@ const UserProvider = ({ children }) => {
                 isAuthenticated: true,
                 token,
                 account: { groupWithRoles, email, username },
+                isLoading: false,
             };
+            console.log(">>> check data : ", data);
             setUser(data);
+        } else {
+            setUser({ ...userDefault, isLoading: false });
         }
     };
 
     useEffect(() => {
-        fetchUser();
+        if (window.location.pathname !== "/" || window.location.pathname !== "/login") {
+            fetchUser();
+        }
     }, []);
     return <UserContext.Provider value={{ user, loginContext, logout }}>{children}</UserContext.Provider>;
 };

@@ -5,7 +5,7 @@ import { UserContext } from "../../context/UserContext";
 const Nav = (props) => {
     const { user } = useContext(UserContext);
     const location = useLocation();
-    if ((user && user.isAuthenticated === true) || location.pathname === "/") {
+    if (user && user.isAuthenticated === true || location.pathname === "/") {
         return (
             <>
                 <div className="topnav">
