@@ -5,15 +5,15 @@ import { UserContext } from "../context/UserContext";
 const PrivateRoutes = (props) => {
     const { user } = useContext(UserContext);
     console.log(user);
-    
-    if (user && user.isAuthenticated === true) {
+
+    if (user && user.isAuthenticated) {
         return (
             <>
                 <Outlet />
             </>
         );
     } else {
-        return <Navigate to="/login"></Navigate>;
+        return <Navigate to="/login"/>
     }
 };
 export default PrivateRoutes;

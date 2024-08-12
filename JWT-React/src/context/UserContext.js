@@ -14,7 +14,7 @@ const UserProvider = ({ children }) => {
 
     // Login updates the user data with a name parameter
     const loginContext = (userData) => {
-        setUser(userData);
+        setUser({ ...userData, isLoading: false });
     };
 
     // Logout updates the user data to default
@@ -28,7 +28,7 @@ const UserProvider = ({ children }) => {
     const fetchUser = async () => {
         let response = await getUserAccount();
         console.log(">>> check res : ", response);
-        if (response && response.EC === 0) {
+        if (response && +response.EC === 0) {
             let groupWithRoles = response.DT.groupWithRoles;
             let email = response.DT.email;
             let username = response.DT.username;
@@ -43,6 +43,7 @@ const UserProvider = ({ children }) => {
             setUser(data);
         } else {
             setUser({ ...userDefault, isLoading: false });
+            
         }
     };
 
