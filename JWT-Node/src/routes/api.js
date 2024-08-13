@@ -3,6 +3,7 @@ import { handleLogin, handleLogout, handleRegister, testApi } from "../controlle
 import { createFunc, deleteFunc, getUserAccount, readFunc, updateFunc } from "../controller/userController";
 import { readGroupFunc } from "../controller/groupController";
 import { checkUserJWT, checkUserPermission } from "../middelware/JWTaction";
+import { createRoleFunc } from "../controller/roleController";
 
 const router = express.Router();
 /**
@@ -22,13 +23,22 @@ const initAPIRoutes = (app) => {
     router.post("/register", handleRegister);
     router.post("/login", handleLogin);
     router.post("/logout", handleLogout);
+
     router.get("/account", getUserAccount);
 
+    // user routes
     router.get("/user/read", readFunc);
     router.post("/user/create", createFunc);
     router.put("/user/update", updateFunc);
     router.delete("/user/delete", deleteFunc);
 
+    // roles routes
+    // router.get("/role/read", readRoleFunc);
+    router.post("/role/create", createRoleFunc);
+    // router.put("/role/update", updateRoleFunc);
+    // router.delete("/role/delete", deleteRoleFunc);
+    
+    // group routes
     router.get("/group/read", readGroupFunc);
 
     return app.use("/api/v1/", router);
