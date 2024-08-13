@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 import { createRolesService } from "../../services/roleService";
+import TableRoles from "./TableRoles";
 const Role = (props) => {
     const listChildDefaults = {
         child1: { url: "", description: "", isValidUrl: true },
     };
     const [listChilds, setListChilds] = useState(listChildDefaults);
+    const childRef = useRef();
     const handleAddNewInput = () => {
         let _listChilds = _.cloneDeep(listChilds);
         _listChilds[`child-${uuidv4()}`] = { url: "", description: "", isValidUrl: true };
@@ -31,11 +33,11 @@ const Role = (props) => {
         let result = [];
         Object.entries(_listChilds).map(([key, child], index) => {
             result.push({
-                url : child.url,
-                description : child.description
-            })
+                url: child.url,
+                description: child.description,
+            });
         });
-        return result
+        return result;
     };
     const handleSave = async () => {
         let invalidObj = Object.entries(listChilds).find(([key, child], index) => {
@@ -43,12 +45,13 @@ const Role = (props) => {
         });
         if (!invalidObj) {
             //  call api
-            let data = buildDataToPersist()
-            let res = await createRolesService(data)
-            if(res?.EC === 0) {
+            let data = buildDataToPersist();
+            let res = await createRolesService(data);
+            if (res?.EC === 0) {
                 toast.success(res.EM);
+                childRef.current.fetchRolesAgain();
+                setListChilds(listChildDefaults);
             }
-            
         } else {
             // error
             toast.error("Input URL must not be empty...");
@@ -58,11 +61,11 @@ const Role = (props) => {
             setListChilds(_listChilds);
         }
     };
-    
+
     return (
         <div className="role-container">
             <div className="container">
-                <div className="row mt-3">
+                <div className="adding-roles mt-3">
                     <div className="title-role">
                         <h3 className="title-role">Create New Roles</h3>
                     </div>
@@ -107,6 +110,12 @@ const Role = (props) => {
                             Save
                         </button>
                     </div>
+                </div>
+                <hr />
+                <div className="mt-3">
+                    <h4>List Current Roles</h4>
+
+                    <TableRoles ref={childRef} />
                 </div>
             </div>
         </div>

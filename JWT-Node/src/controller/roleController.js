@@ -1,33 +1,33 @@
-import { createNewGroups } from "../service/roleApiService";
+import { createNewGroups, deleteRole, getAllRolesWithPagination } from "../service/roleApiService";
 
-// const readFunc = async (req, res) => {
-//     try {
-//         if (req.query.page && req.query.limit) {
-//             let page = req.query.page;
-//             let limit = req.query.limit;
-//             let data = await getUserWithPagination(+page, +limit);
-//             return res.status(200).json({
-//                 EM: data.EM, // error message
-//                 EC: data.EC, // error code
-//                 DT: data.DT, // data
-//             });
-//         } else {
-//             let data = await getAllUsers();
-//             return res.status(200).json({
-//                 EM: data.EM, // error message
-//                 EC: data.EC, // error code
-//                 DT: data.DT, // data
-//             });
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).json({
-//             EM: "Error from server", // error message
-//             EC: "-1", // error code
-//             DT: "", // data
-//         });
-//     }
-// };
+const readRoleFunc = async (req, res) => {
+    try {
+        if (req.query.page && req.query.limit) {
+            let page = req.query.page;
+            let limit = req.query.limit;
+            let data = await getAllRolesWithPagination(+page, +limit);
+            return res.status(200).json({
+                EM: data.EM, // error message
+                EC: data.EC, // error code
+                DT: data.DT, // data
+            });
+        } else {
+            let data = await getAllUsers();
+            return res.status(200).json({
+                EM: data.EM, // error message
+                EC: data.EC, // error code
+                DT: data.DT, // data
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: "Error from server", // error message
+            EC: "-1", // error code
+            DT: "", // data
+        });
+    }
+};
 const createRoleFunc = async (req, res) => {
     try {
         let data = await createNewGroups(req.body);
@@ -62,22 +62,22 @@ const createRoleFunc = async (req, res) => {
 //         });
 //     }
 // };
-// const deleteFunc = async (req, res) => {
-//     try {
-//         let data = await deleteUser(req.body.id);
-//         return res.status(200).json({
-//             EM: data.EM, // error message
-//             EC: data.EC, // error code
-//             DT: data.DT, // data
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).json({
-//             EM: "Error from server", // error message
-//             EC: "-1", // error code
-//             DT: "", // data
-//         });
-//     }
-// };
+const deleteRoleFunc = async (req, res) => {
+    try {
+        let data = await deleteRole(req.body.id);
+        return res.status(200).json({
+            EM: data.EM, // error message
+            EC: data.EC, // error code
+            DT: data.DT, // data
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: "Error from server", // error message
+            EC: "-1", // error code
+            DT: "", // data
+        });
+    }
+};
 
-export { createRoleFunc };
+export { createRoleFunc ,readRoleFunc , deleteRoleFunc};
