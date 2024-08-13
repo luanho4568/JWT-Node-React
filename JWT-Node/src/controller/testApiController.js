@@ -54,4 +54,22 @@ const handleLogin = async (req, res) => {
         });
     }
 };
-export { handleRegister, handleLogin };
+const handleLogout = (req, res) => {
+    try {
+        // clear cookie
+        res.clearCookie("key");
+        return res.status(200).json({
+            EM: "Logout success!", // error message
+            EC: 0, // error code
+            DT: "", // data
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: "Error from server", // error message
+            EC: "-1", // error code
+            DT: "", // data
+        });
+    }
+};
+export { handleRegister, handleLogin, handleLogout };

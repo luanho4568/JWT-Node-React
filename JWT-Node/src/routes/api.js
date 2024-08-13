@@ -1,5 +1,5 @@
 import express from "express";
-import { handleLogin, handleRegister, testApi } from "../controller/testApiController";
+import { handleLogin, handleLogout, handleRegister, testApi } from "../controller/testApiController";
 import { createFunc, deleteFunc, getUserAccount, readFunc, updateFunc } from "../controller/userController";
 import { readGroupFunc } from "../controller/groupController";
 import { checkUserJWT, checkUserPermission } from "../middelware/JWTaction";
@@ -21,6 +21,7 @@ const initAPIRoutes = (app) => {
 
     router.post("/register", handleRegister);
     router.post("/login", handleLogin);
+    router.post("/logout", handleLogout);
     router.get("/account", getUserAccount);
 
     router.get("/user/read", readFunc);

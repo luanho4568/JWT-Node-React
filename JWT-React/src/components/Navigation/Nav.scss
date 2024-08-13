@@ -23,3 +23,21 @@ body {
         color: white;
     }
 }
+
+.nav-header {
+    .bg-header {
+        background-color: #20232a;
+    }
+    .navbar-nav {
+        a,
+        .nav-link {
+            color: white !important; 
+            &:hover {
+                color: #61dafb !important;
+            }
+        }
+        .item-dr {
+            color: #333 !important;
+        }
+    }
+}
