@@ -9,7 +9,6 @@ import AppRoutes from "./routes/AppRoutes";
 import { UserContext } from "./context/UserContext";
 function App() {
     const { user } = useContext(UserContext);
-    console.log(user);
     return (
         <>
             <Router>
@@ -40,7 +39,7 @@ function App() {
 
             <ToastContainer
                 position="top-center"
-                autoClose={5000}
+                autoClose={2000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

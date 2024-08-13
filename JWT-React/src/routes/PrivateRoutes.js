@@ -4,7 +4,6 @@ import { UserContext } from "../context/UserContext";
 
 const PrivateRoutes = (props) => {
     const { user } = useContext(UserContext);
-    console.log(user);
 
     if (user && user.isAuthenticated) {
         return (

@@ -7,3 +7,4 @@
 # npm i --save-exect react-paginate@8.1.0
 # npm i --save-exect react-bootstrap@2.1.1
 # npm i --save-exect react-loader-spinner
+# npm i --save-exect uuid@8.3.2
