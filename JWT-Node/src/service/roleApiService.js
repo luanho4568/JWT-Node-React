@@ -1,3 +1,4 @@
+import ret from "bluebird/js/release/util";
 import db from "../models/index";
 
 const createNewGroups = async (roles) => {
@@ -29,17 +30,32 @@ const createNewGroups = async (roles) => {
         };
     }
 };
-
-const getAllRolesWithPagination = async (page, limit) => {
+const getAllRoles = async () => {
     try {
-        if ((!page && !limit) || page <= 0 || limit <= 0) {
-            const data = await db.Role.findAll();
+        let data = await db.Role.findAll();
+        if (!data) {
             return {
-                EM: "Get list roles successfully!!",
+                EM: "Roles not found",
                 EC: 0,
-                DT: data,
+                DT: [],
             };
         }
+        return {
+            EM: "Get data success!",
+            EC: 0,
+            DT: data,
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            EM: "Somthing wrongs with services",
+            EC: -1,
+            DT: [],
+        };
+    }
+};
+const getAllRolesWithPagination = async (page, limit) => {
+    try {
         let offset = (page - 1) * limit;
         const { count, rows } = await db.Role.findAndCountAll({
             offset,
@@ -97,4 +113,40 @@ const deleteRole = async (id) => {
         };
     }
 };
-export { createNewGroups, getAllRolesWithPagination, deleteRole };
+
+const getRoleByGroup = async (groupId) => {
+    try {
+        if (!groupId) {
+            return {
+                EM: "Not found any Roles",
+                EC: 0,
+                DT: [],
+            };
+        }
+
+        let roles = await db.Group.findOne({
+            where: { id: groupId },
+            attributes: ["id", "name", "description"],
+            include: [
+                {
+                    model: db.Role,
+                    attributes: ["id", "url", "description"],
+                    through: { attributes: [] },
+                },
+            ],
+        });
+        return {
+            EM: "Get role by group successfully",
+            EC: 0,
+            DT: roles,
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            EM: "Somthing wrongs with services",
+            EC: -1,
+            DT: [],
+        };
+    }
+};
+export { createNewGroups, getAllRolesWithPagination, deleteRole, getAllRoles, getRoleByGroup };

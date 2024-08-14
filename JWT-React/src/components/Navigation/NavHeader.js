@@ -38,6 +38,9 @@ const NavComponent = () => {
                                 <NavLink className="nav-link" to="/roles">
                                     Roles
                                 </NavLink>
+                                <NavLink className="nav-link" to="/group-role">
+                                    Group-Role
+                                </NavLink>
                                 <NavLink className="nav-link" to="/about">
                                     About
                                 </NavLink>

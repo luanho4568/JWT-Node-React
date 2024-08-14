@@ -43,7 +43,7 @@ const getAllUsers = async () => {
         });
         if (!user) {
             return {
-                EM: "Get data success!",
+                EM : "User not found",
                 EC: 0,
                 DT: [],
             };
