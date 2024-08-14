@@ -1,4 +1,11 @@
-import { createNewGroups, deleteRole, getAllRoles, getAllRolesWithPagination, getRoleByGroup } from "../service/roleApiService";
+import {
+    assignRoleToGroup,
+    createNewGroups,
+    deleteRole,
+    getAllRoles,
+    getAllRolesWithPagination,
+    getRoleByGroup,
+} from "../service/roleApiService";
 
 const readRoleFunc = async (req, res) => {
     try {
@@ -81,4 +88,21 @@ const getRoleByGroupFunc = async (req, res) => {
         });
     }
 };
-export { createRoleFunc, readRoleFunc, deleteRoleFunc, getRoleByGroupFunc };
+const assignRoleToGroupFunc = async (req, res) => {
+    try {
+        let data = await assignRoleToGroup(req.body.data);
+        return res.status(200).json({
+            EM: data.EM, // error message
+            EC: data.EC, // error code
+            DT: data.DT, // data
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: "Error from server", // error message
+            EC: "-1", // error code
+            DT: "", // data
+        });
+    }
+};
+export { createRoleFunc, readRoleFunc, deleteRoleFunc, getRoleByGroupFunc, assignRoleToGroupFunc };

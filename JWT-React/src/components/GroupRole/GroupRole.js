@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./GroupRole.scss";
 import { fetchGroup } from "../../services/userService";
 import { toast } from "react-toastify";
-import { fetchAllRoles, fetchRolesByGroup } from "../../services/roleService";
+import { assignRolesToGroup, fetchAllRoles, fetchRolesByGroup } from "../../services/roleService";
 import _ from "lodash";
 const GroupRole = (props) => {
     const [userGroups, setUserGroups] = useState([]);
@@ -69,6 +69,28 @@ const GroupRole = (props) => {
         }
         setAssignRolesByGroup(_assignRolesByGroup);
     };
+
+    const buildDataToSave = () => {
+        let result = {};
+        const _assignRolesByGroup = _.cloneDeep(assignRolesByGroup);
+        result.groupId = selectGroup;
+        let groupRolesFilter = _assignRolesByGroup.filter((item) => item.isAssigned === true);
+        let finalGroupRoles = groupRolesFilter.map(item => {
+            let data = { groupId: +selectGroup, roleId: +item.id };
+            return data;
+        });
+        result.groupRoles = finalGroupRoles;
+        return result;
+    };
+    const handleSave = async () => {
+        let data = buildDataToSave();
+        let response = await assignRolesToGroup(data)
+        if(response?.EC === 0) {
+            toast.success(response.EM);
+        }else {
+            toast.error(response.EM);
+        }
+    };
     return (
         <div className="group-role-container">
             <div className="container">
@@ -115,7 +137,9 @@ const GroupRole = (props) => {
                                     );
                                 })}
                             <div className="mt-3">
-                                <button className="btn btn-warning">Save</button>
+                                <button className="btn btn-warning" onClick={() => handleSave()}>
+                                    Save
+                                </button>
                             </div>
                         </div>
                     )}

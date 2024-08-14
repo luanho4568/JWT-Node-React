@@ -1,5 +1,6 @@
 import ret from "bluebird/js/release/util";
 import db from "../models/index";
+import { where } from "sequelize";
 
 const createNewGroups = async (roles) => {
     try {
@@ -149,4 +150,28 @@ const getRoleByGroup = async (groupId) => {
         };
     }
 };
-export { createNewGroups, getAllRolesWithPagination, deleteRole, getAllRoles, getRoleByGroup };
+const assignRoleToGroup = async (data) => {
+    try {
+        
+        await db.Group_Role.destroy({
+            where : {groupId : +data.groupId},
+        })
+
+        await db.Group_Role.bulkCreate(data.groupRoles)
+
+        return {
+            EM: "Assign Role to Group successfully",
+            EC: 0,
+            DT: [],
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            EM: "Somthing wrongs with services",
+            EC: -1,
+            DT: [],
+        };
+    }
+}
+    
+export { createNewGroups, getAllRolesWithPagination, deleteRole, getAllRoles, getRoleByGroup ,assignRoleToGroup };
